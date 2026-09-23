@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Ticket {
+  id               String      @id
+  building         String
+  floor            String
+  room             String
+  category         String
+  urgency          String      @default("Normal")
+  description      String
+  image_before_url String
+  image_after_url  String?
+  reporter_email   String
+  reporter_name    String?
+  status           String      @default("PENDING") // PENDING, IN_PROGRESS, RESOLVED
+  assigned_tech    String?
+  sla_time         String?
+  likes            Int         @default(0)
+  comments_count   Int         @default(0)
+  rating           Int?
+  created_at       DateTime    @default(now())
+  updated_at       DateTime    @updatedAt
+
+  status_logs      StatusLog[]
+}
+
+model StatusLog {
+  id          Int      @id @default(autoincrement())
+  ticket_id   String
+  ticket      Ticket   @relation(fields: [ticket_id], references: [id], onDelete: Cascade)
+  status_step String
+  note        String?
+  created_at  DateTime @default(now())
+}

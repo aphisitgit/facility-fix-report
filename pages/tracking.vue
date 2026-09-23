@@ -9,8 +9,8 @@
             SPU
           </div>
           <div>
-            <h1 class="text-xs font-bold text-slate-900 leading-tight">SPU Facility Fix</h1>
-            <p class="text-[10px] text-slate-400">My Reports</p>
+            <h1 class="text-xs font-bold text-slate-900 leading-tight">Facility Fix & Report</h1>
+            <p class="text-[10px] text-slate-400">My Reports & Tracking</p>
           </div>
         </div>
 

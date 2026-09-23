@@ -94,7 +94,7 @@ function selectPreset(preset: any) {
   emit('close')
   if (preset) {
     router.push({
-      path: '/report',
+      path: '/',
       query: {
         building: preset.building,
         floor: preset.floor,

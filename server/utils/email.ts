@@ -48,22 +48,22 @@ export async function sendTrackingEmail(params: {
 
   if (status === 'PENDING') {
     template = 'TICKET_RECEIVED'
-    subject = `[UniLoop SPU] Ticket #${ticketId} Received: ${category} at ${building}`
+    subject = `[Facility Fix & Report] Ticket #${ticketId} Received: ${category} at ${building}`
     previewText = `Your maintenance report for ${room} (${building}) has been received by SPU Facilities Team.`
   } else if (status === 'IN_PROGRESS') {
     template = 'IN_PROGRESS'
-    subject = `[UniLoop SPU] Ticket #${ticketId} In Progress: Technician Dispatched`
+    subject = `[Facility Fix & Report] Ticket #${ticketId} In Progress: Technician Dispatched`
     previewText = `${assignedTech || 'Facility Team'} is actively working on your report at ${building}, ${room}.`
   } else if (status === 'RESOLVED') {
     template = 'REPAIR_COMPLETED'
-    subject = `[UniLoop SPU] Ticket #${ticketId} Resolved: Repair Completed`
+    subject = `[Facility Fix & Report] Ticket #${ticketId} Resolved: Repair Completed`
     previewText = `Maintenance at ${room} (${building}) has been completed. Check out the after-repair photo.`
   }
 
   const htmlBody = `
     <div style="font-family: 'Inter', sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
       <div style="background: linear-gradient(135deg, #4A154B 0%, #2E0D2F 100%); padding: 24px; color: white;">
-        <h2 style="margin: 0; font-size: 20px;">UniLoop: SPU Facility Fix & Report</h2>
+        <h2 style="margin: 0; font-size: 20px;">Facility Fix & Report</h2>
         <p style="margin: 4px 0 0 0; opacity: 0.8; font-size: 13px;">Sripatum University Campus Facilities</p>
       </div>
       <div style="padding: 24px;">

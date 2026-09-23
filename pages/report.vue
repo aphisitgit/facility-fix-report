@@ -37,7 +37,7 @@
         
         <!-- Estimated Time Badge -->
         <div class="flex items-center justify-between text-[11px] text-slate-400">
-          <span>SPU Campus Care Operations</span>
+          <span>SPU Facility Fix & Report</span>
           <span class="flex items-center gap-1 text-slate-500 font-medium">
             <Clock class="w-3.5 h-3.5" /> Estimated: 1 min
           </span>

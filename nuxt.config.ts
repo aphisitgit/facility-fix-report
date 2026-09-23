@@ -11,11 +11,11 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: 'UniLoop: Facility Fix & Report - Sripatum University',
+      title: 'Facility Fix & Report - Sripatum University',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'SPU Campus Facility Operations, Maintenance Triage, and Infrastructure Health Reporting Portal' },
+        { name: 'description', content: 'SPU Facility Fix & Report: Campus Facility Operations, Maintenance Triage, and Infrastructure Health Reporting Portal' },
         { name: 'theme-color', content: '#4A154B' }
       ],
       link: [

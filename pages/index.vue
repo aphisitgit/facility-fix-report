@@ -10,8 +10,8 @@
             SPU
           </div>
           <div>
-            <h1 class="text-xs font-bold text-slate-900 leading-tight">SPU Facility Fix</h1>
-            <p class="text-[10px] text-slate-400">Home</p>
+            <h1 class="text-xs font-bold text-slate-900 leading-tight">Facility Fix & Report</h1>
+            <p class="text-[10px] text-slate-400">Campus Maintenance Hub</p>
           </div>
         </div>
 
@@ -67,8 +67,54 @@
           </NuxtLink>
         </div>
 
-        <!-- Campus Alert Banner -->
-        <div v-if="showAlert" class="relative bg-spu-pink-50 border border-spu-pink-200/80 rounded-2xl p-3.5 text-xs shadow-xs animate-fade-in">
+        <!-- SPECIAL ROOM-SPECIFIC QR SCANNED HUB (When a room QR is scanned) -->
+        <div v-if="isRoomScanned" class="spu-gradient-hero rounded-3xl p-5 text-white shadow-xl shadow-spu-purple-900/20 relative overflow-hidden space-y-4 animate-fade-in">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30">
+                <QrCode class="w-5 h-5" />
+              </div>
+              <div>
+                <span class="text-[10px] font-black uppercase text-pink-200 tracking-wider flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                  Room QR Scanned & Verified
+                </span>
+                <h3 class="text-base font-black leading-tight">{{ currentRoom }}</h3>
+              </div>
+            </div>
+
+            <!-- Exit room button -->
+            <button 
+              @click="clearRoomFilter"
+              class="text-[10px] font-semibold bg-white/20 hover:bg-white/30 text-white px-2 py-1 rounded-xl transition-colors"
+            >
+              All Campus
+            </button>
+          </div>
+
+          <div class="p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="text-white/80">Location:</span>
+              <span class="font-bold">{{ currentBuilding }} • Floor {{ currentFloor || '1' }}</span>
+            </div>
+            <div class="flex items-center justify-between mt-1">
+              <span class="text-white/80">Previous Reports:</span>
+              <span class="font-bold text-pink-200">{{ roomReports.length }} items in this room</span>
+            </div>
+          </div>
+
+          <!-- Primary Report in This Room Button -->
+          <button 
+            @click="reportInThisRoom"
+            class="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-spu-pink to-spu-pink-400 text-white font-black text-xs shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+          >
+            <Camera class="w-4 h-4" />
+            <span>Report an Issue in this Room ▷</span>
+          </button>
+        </div>
+
+        <!-- Campus Alert Banner (Shown when not in room view) -->
+        <div v-else-if="showAlert" class="relative bg-spu-pink-50 border border-spu-pink-200/80 rounded-2xl p-3.5 text-xs shadow-xs animate-fade-in">
           <button 
             @click="showAlert = false" 
             class="absolute top-2.5 right-2.5 text-spu-pink-600/70 hover:text-spu-pink-900 transition-colors"
@@ -93,14 +139,12 @@
           </div>
         </div>
 
-        <!-- Quick Report via Room QR (Hero Card) -->
-        <div class="spu-gradient-hero rounded-3xl p-5 text-white shadow-xl shadow-spu-purple-900/20 relative overflow-hidden group">
-          <!-- Background Subtle Accents -->
+        <!-- Quick Report via Room QR (Shown when no room is scanned yet) -->
+        <div v-if="!isRoomScanned" class="spu-gradient-hero rounded-3xl p-5 text-white shadow-xl shadow-spu-purple-900/20 relative overflow-hidden group">
           <div class="absolute -right-8 -bottom-8 w-36 h-36 rounded-full bg-white/10 blur-2xl"></div>
           <div class="absolute -left-6 -top-6 w-28 h-28 rounded-full bg-spu-pink/30 blur-xl"></div>
 
           <div class="relative z-10 flex flex-col items-center text-center">
-            <!-- QR Icon Badge -->
             <div class="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 flex items-center justify-center mb-3 shadow-inner">
               <QrCode class="w-7 h-7 text-white" />
             </div>
@@ -110,7 +154,6 @@
               Scan barcode stickers on lecture desks, projectors, or entrance doors to auto-fill location.
             </p>
 
-            <!-- Big Scan Button -->
             <button 
               @click="isQrModalOpen = true"
               type="button"
@@ -122,8 +165,8 @@
           </div>
         </div>
 
-        <!-- Search Location Input -->
-        <div class="space-y-2">
+        <!-- Search Location Input (Shown if not in room mode) -->
+        <div v-if="!isRoomScanned" class="space-y-2">
           <div class="relative">
             <Search class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input 
@@ -154,7 +197,9 @@
         <div class="space-y-2.5">
           <div class="flex items-center justify-between">
             <h3 class="text-xs font-bold text-slate-900">Issue Categories</h3>
-            <NuxtLink to="/report" class="text-[11px] font-semibold text-spu-pink hover:underline">Browse all</NuxtLink>
+            <NuxtLink :to="isRoomScanned ? `/report?building=${encodeURIComponent(currentBuilding || '')}&floor=${encodeURIComponent(currentFloor || '1')}&room=${encodeURIComponent(currentRoom || '')}` : '/report'" class="text-[11px] font-semibold text-spu-pink hover:underline">
+              Browse all
+            </NuxtLink>
           </div>
 
           <div class="grid grid-cols-4 gap-2.5">
@@ -172,21 +217,46 @@
           </div>
         </div>
 
-        <!-- Recent Campus Reports -->
+        <!-- RECENT REPORTS / ROOM HISTORY (Filtered to this room if scanned!) -->
         <div class="space-y-2.5">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-1.5">
-              <h3 class="text-xs font-bold text-slate-900">Recent Campus Reports</h3>
+              <h3 class="text-xs font-bold text-slate-900">
+                {{ isRoomScanned ? `Maintenance History for ${currentRoom}` : 'Recent Campus Reports' }}
+              </h3>
               <span class="w-1.5 h-1.5 rounded-full bg-spu-pink"></span>
             </div>
-            <NuxtLink to="/tracking" class="text-[11px] font-semibold text-spu-pink hover:underline">
+            
+            <button 
+              v-if="isRoomScanned"
+              @click="clearRoomFilter"
+              class="text-[11px] font-semibold text-spu-purple hover:underline"
+            >
+              View All Campus &gt;
+            </button>
+            <NuxtLink v-else to="/tracking" class="text-[11px] font-semibold text-spu-pink hover:underline">
               See All ({{ reports.length }}) &gt;
             </NuxtLink>
           </div>
 
-          <div class="space-y-2.5">
+          <!-- Empty State if no reports for this room -->
+          <div 
+            v-if="roomReports.length === 0" 
+            class="p-6 bg-slate-50 border border-slate-200 rounded-3xl text-center space-y-2"
+          >
+            <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+              <CheckCircle2 class="w-5 h-5" />
+            </div>
+            <h4 class="text-xs font-bold text-slate-800">No Active Issues in this Room</h4>
+            <p class="text-[11px] text-slate-500 max-w-xs mx-auto">
+              Everything in {{ currentRoom }} is currently in good order. If you notice any damage, tap the button above to report it!
+            </p>
+          </div>
+
+          <!-- List of Reports (Filtered to room or campus-wide) -->
+          <div v-else class="space-y-2.5">
             <div 
-              v-for="ticket in reports.slice(0, 3)" 
+              v-for="ticket in roomReports" 
               :key="ticket.id"
               @click="goToTicket(ticket.id)"
               class="p-3.5 bg-white rounded-2xl border border-slate-200/80 hover:border-spu-purple/40 shadow-xs hover:shadow-md transition-all cursor-pointer space-y-2"
@@ -248,7 +318,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { 
   Bell, 
   MapPin, 
@@ -261,17 +331,32 @@ import {
   Clock, 
   ThumbsUp, 
   MessageSquare,
+  CheckCircle2,
   Fan,
   Lightbulb,
   Wrench,
   Tv
 } from 'lucide-vue-next'
 
+const route = useRoute()
+const router = useRouter()
+
 const showAlert = ref(true)
 const isQrModalOpen = ref(false)
 const searchQuery = ref('')
 const reports = ref<any[]>([])
-const router = useRouter()
+
+const currentBuilding = computed(() => (route.query.building as string) || '')
+const currentFloor = computed(() => (route.query.floor as string) || '')
+const currentRoom = computed(() => (route.query.room as string) || '')
+const isRoomScanned = computed(() => !!currentRoom.value)
+
+// Filter reports to ONLY this room if room is scanned!
+const roomReports = computed(() => {
+  if (!isRoomScanned.value) return reports.value.slice(0, 4)
+  const rm = currentRoom.value.toLowerCase()
+  return reports.value.filter(t => t.room.toLowerCase().includes(rm) || rm.includes(t.room.toLowerCase()))
+})
 
 const quickBuildings = [
   { name: 'Bldg 11', room: '11-502' },
@@ -312,9 +397,24 @@ function formatTimestamp(ts: string) {
   return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
-function quickSelectLocation(bldg: string, room: string) {
+function clearRoomFilter() {
+  router.push('/')
+}
+
+function reportInThisRoom() {
   router.push({
     path: '/report',
+    query: {
+      building: currentBuilding.value,
+      floor: currentFloor.value,
+      room: currentRoom.value
+    }
+  })
+}
+
+function quickSelectLocation(bldg: string, room: string) {
+  router.push({
+    path: '/',
     query: {
       building: bldg,
       room: room
@@ -326,6 +426,9 @@ function selectCategoryAndReport(catName: string) {
   router.push({
     path: '/report',
     query: {
+      building: currentBuilding.value || undefined,
+      floor: currentFloor.value || undefined,
+      room: currentRoom.value || undefined,
       category: catName
     }
   })

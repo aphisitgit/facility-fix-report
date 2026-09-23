@@ -3,7 +3,7 @@
     <!-- Left Sidebar (Desktop) -->
     <AdminSidebar 
       :active-tickets-count="activeCount" 
-      @open-qr-gen="isQrModalOpen = true"
+      @open-qr-gen="isQrGenOpen = true"
       @alert-feature="featureAlert"
       @logout="router.push('/')"
     />
@@ -543,6 +543,9 @@
         @updated="handleTicketUpdated"
       />
 
+      <!-- Room QR Code Sticker Generator Modal -->
+      <RoomQrGeneratorModal :is-open="isQrGenOpen" @close="isQrGenOpen = false" />
+
       <!-- QR Modal -->
       <QrScannerModal :is-open="isQrModalOpen" @close="isQrModalOpen = false" />
 
@@ -589,6 +592,7 @@ const tableBuildingFilter = ref('ALL')
 const isStatusModalOpen = ref(false)
 const selectedTicket = ref<any>(null)
 const isQrModalOpen = ref(false)
+const isQrGenOpen = ref(false)
 
 const activeCount = computed(() => {
   return tickets.value.filter(t => t.status !== 'RESOLVED').length

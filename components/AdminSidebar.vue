@@ -8,10 +8,10 @@
         </div>
         <div>
           <div class="flex items-center gap-1.5">
-            <span class="font-bold text-sm text-slate-900 leading-tight">UniLoop SPU</span>
+            <span class="font-bold text-sm text-slate-900 leading-tight">Facility Fix</span>
             <span class="bg-spu-pink-100 text-spu-pink-700 text-[10px] font-semibold px-1.5 py-0.5 rounded">Admin Hub</span>
           </div>
-          <p class="text-[11px] text-slate-400">Campus Facilities Ops</p>
+          <p class="text-[11px] text-slate-400">SPU Facility Fix & Report</p>
         </div>
       </div>
 

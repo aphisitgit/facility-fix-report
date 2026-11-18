@@ -1,7 +1,8 @@
-import { prisma } from '~/server/utils/prisma'
+import { prisma, ensureDbReady } from '~/server/utils/prisma'
 import { sendTrackingEmail } from '~/server/utils/email'
 
 export default defineEventHandler(async (event) => {
+  await ensureDbReady()
   const body = await readBody(event)
 
   const {

@@ -1,6 +1,7 @@
-import { prisma } from '~/server/utils/prisma'
+import { prisma, ensureDbReady } from '~/server/utils/prisma'
 
 export default defineEventHandler(async () => {
+  await ensureDbReady()
   try {
     const users = await prisma.adminUser.findMany({
       select: {

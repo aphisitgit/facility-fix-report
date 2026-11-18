@@ -1,6 +1,7 @@
-import { prisma } from '~/server/utils/prisma'
+import { prisma, ensureDbReady } from '~/server/utils/prisma'
 
 export default defineEventHandler(async (event) => {
+  await ensureDbReady()
   const query = getQuery(event)
   const status = query.status as string | undefined
   const building = query.building as string | undefined

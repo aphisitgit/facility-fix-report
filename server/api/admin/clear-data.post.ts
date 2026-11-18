@@ -1,6 +1,7 @@
-import { prisma } from '~/server/utils/prisma'
+import { prisma, ensureDbReady } from '~/server/utils/prisma'
 
 export default defineEventHandler(async (event) => {
+  await ensureDbReady()
   try {
     // Delete all StatusLogs first (foreign key cascade safety)
     const deletedLogs = await prisma.statusLog.deleteMany({})

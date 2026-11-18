@@ -10,6 +10,19 @@ export default defineEventHandler(async () => {
       orderBy: { created_at: 'desc' }
     })
 
+    const adminUsers = await prisma.adminUser.findMany({
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        role: true,
+        phone: true,
+        avatar_url: true,
+        created_at: true
+      },
+      orderBy: { created_at: 'desc' }
+    })
+
     return {
       success: true,
       database: 'SQLite (prisma/dev.db)',
@@ -23,13 +36,19 @@ export default defineEventHandler(async () => {
           count: statusLogs.length,
           columns: ['id', 'ticket_id', 'status_step', 'note', 'created_at'],
           rows: statusLogs
+        },
+        admin_users: {
+          count: adminUsers.length,
+          columns: ['id', 'username', 'name', 'role', 'phone', 'created_at'],
+          rows: adminUsers
         }
       }
     }
   } catch (err: any) {
     throw createError({
       statusCode: 500,
-      statusMessage: `Database raw query failed: ${err.message}`
+      statusMessage: 'Internal Server Error',
+      message: `Database raw query failed: ${err.message}`
     })
   }
 })

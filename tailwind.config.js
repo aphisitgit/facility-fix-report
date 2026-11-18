@@ -52,8 +52,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'Prompt', 'sans-serif'],
-        display: ['Inter', 'Prompt', 'sans-serif']
+        sans: ['Prompt', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        display: ['Prompt', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
       },
       boxShadow: {
         'spu-sm': '0 2px 8px -1px rgba(74, 21, 75, 0.08), 0 1px 4px -1px rgba(214, 51, 132, 0.06)',

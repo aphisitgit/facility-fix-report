@@ -50,7 +50,8 @@ export default defineEventHandler(async (event) => {
   } catch (err: any) {
     throw createError({
       statusCode: 500,
-      statusMessage: `Failed to fetch reports: ${err.message}`
+      statusMessage: 'Internal Server Error',
+      message: `Failed to fetch reports: ${err.message}`
     })
   }
 })

@@ -3,45 +3,78 @@
     <!-- Left Sidebar -->
     <AdminSidebar 
       :active-tickets-count="tickets.length"
-      @logout="router.push('/')"
+      :is-open="adminSidebar.isSidebarOpen.value"
+      @close="adminSidebar.close()"
+      @logout="adminAuth.logout()"
     />
 
     <!-- Main Content Area -->
-    <div class="flex-1 min-w-0 flex flex-col">
+    <div class="flex-1 min-w-0 flex flex-col transition-all duration-300">
       <!-- Top Header -->
-      <header class="bg-white border-b border-slate-200 sticky top-0 z-20 px-8 py-4 flex items-center justify-between">
-        <div>
-          <div class="flex items-center gap-2">
-            <Database class="w-5 h-5 text-spu-purple" />
-            <h1 class="text-lg font-bold text-slate-900">Database Explorer & Schema Inspector</h1>
-            <span class="text-xs bg-emerald-50 text-emerald-700 font-mono font-bold px-2 py-0.5 rounded-full border border-emerald-200">
-              SQLite: prisma/dev.db
-            </span>
+      <header class="bg-white border-b border-slate-200 sticky top-0 z-20 px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <!-- Navigation Drawer Toggle Button -->
+          <button 
+            @click="adminSidebar.toggle()" 
+            type="button"
+            class="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors shrink-0 flex items-center justify-center"
+            :title="adminSidebar.isSidebarOpen.value ? 'Slide out / Hide Drawer' : 'Open Navigation Drawer'"
+            aria-label="Toggle Navigation Drawer"
+          >
+            <Menu class="w-5 h-5" />
+          </button>
+
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <Database class="w-4 h-4 sm:w-5 sm:h-5 text-spu-purple shrink-0" />
+              <h1 class="text-base sm:text-lg font-bold text-slate-900">สำรวจและจัดการฐานข้อมูล (Database Explorer)</h1>
+              <span class="text-[10px] sm:text-xs bg-emerald-50 text-emerald-700 font-mono font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+                SQLite: prisma/dev.db
+              </span>
+            </div>
+            <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5">ตรวจสอบและเรียกดูข้อมูลดิบในฐานข้อมูล SQLite แบบเรียลไทม์</p>
           </div>
-          <p class="text-xs text-slate-400 mt-0.5">Live view and verification of UniLoop database records</p>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end">
           <button 
             @click="fetchDbRaw"
-            class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            class="px-3 sm:px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors"
           >
             <RefreshCw class="w-3.5 h-3.5" :class="isLoading ? 'animate-spin' : ''" />
-            <span>Refresh Tables</span>
+            <span>รีเฟรชข้อมูล</span>
           </button>
 
           <button 
             @click="showPrismaStudioGuide = true"
-            class="px-4 py-2 spu-gradient-hero text-white rounded-xl text-xs font-bold hover:opacity-95 shadow-sm transition-all flex items-center gap-1.5"
+            class="px-3 sm:px-4 py-2 spu-gradient-hero text-white rounded-xl text-xs font-bold hover:opacity-95 shadow-sm transition-all flex items-center gap-1.5"
           >
             <ExternalLink class="w-3.5 h-3.5" />
-            <span>How to Open Prisma Studio</span>
+            <span>Prisma Studio</span>
+          </button>
+
+          <!-- Language Switcher (ไทย / ENG) -->
+          <LanguageSwitcher />
+
+          <button 
+            @click="notif.openNotificationCenter()"
+            class="relative p-2 text-slate-500 hover:text-slate-800 rounded-xl hover:bg-slate-100 transition-colors"
+            title="ศูนย์แจ้งเตือน Admin"
+            aria-label="Admin Notifications"
+          >
+            <Bell class="w-4 h-4" />
+            <span 
+              v-if="notif.unreadCount.value > 0"
+              class="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 bg-spu-pink text-white text-[9px] font-extrabold rounded-full flex items-center justify-center px-1 ring-2 ring-white animate-pulse"
+            >
+              {{ notif.unreadCount.value }}
+            </span>
           </button>
         </div>
       </header>
 
       <!-- Main Database Inspector -->
-      <main class="p-8 space-y-6 flex-1 overflow-y-auto">
+      <main class="p-4 sm:p-6 lg:p-8 space-y-6 flex-1 overflow-y-auto">
         
         <!-- Database Guide Cards (3 Methods to inspect the Database) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -109,6 +142,15 @@
                 <span>Table: StatusLog</span>
                 <span class="text-[10px] opacity-80 bg-black/20 px-1.5 py-0.2 rounded-full">{{ statusLogs.length }} rows</span>
               </button>
+
+              <button 
+                @click="selectedTable = 'admin_users'"
+                class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2"
+                :class="selectedTable === 'admin_users' ? 'bg-spu-purple text-white shadow-xs' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'"
+              >
+                <span>Table: AdminUser</span>
+                <span class="text-[10px] opacity-80 bg-black/20 px-1.5 py-0.2 rounded-full">{{ adminUsers.length }} rows</span>
+              </button>
             </div>
 
             <!-- View format toggle -->
@@ -118,14 +160,14 @@
                 class="px-2.5 py-1 rounded-lg transition-all"
                 :class="viewFormat === 'table' ? 'bg-white text-slate-800 shadow-xs' : 'text-slate-500'"
               >
-                Table View
+                มุมมองตาราง (Table)
               </button>
               <button 
                 @click="viewFormat = 'json'"
                 class="px-2.5 py-1 rounded-lg transition-all"
                 :class="viewFormat === 'json' ? 'bg-white text-slate-800 shadow-xs' : 'text-slate-500'"
               >
-                Raw JSON
+                ข้อมูลดิบ JSON (Raw)
               </button>
             </div>
           </div>
@@ -193,9 +235,35 @@
             </table>
           </div>
 
+          <!-- Table View for Admin Users -->
+          <div v-else-if="selectedTable === 'admin_users' && viewFormat === 'table'" class="overflow-x-auto">
+            <table class="w-full text-left text-xs whitespace-nowrap">
+              <thead class="bg-slate-50 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-200 font-mono">
+                <tr>
+                  <th class="p-3 pl-5">id</th>
+                  <th class="p-3">username</th>
+                  <th class="p-3">name</th>
+                  <th class="p-3">role</th>
+                  <th class="p-3">phone</th>
+                  <th class="p-3 pr-5">created_at</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 font-sans">
+                <tr v-for="user in adminUsers" :key="user.id" class="hover:bg-slate-50/80 transition-colors">
+                  <td class="p-3 pl-5 font-mono text-slate-400">{{ user.id }}</td>
+                  <td class="p-3 font-mono font-bold text-spu-purple">{{ user.username }}</td>
+                  <td class="p-3 font-semibold text-slate-800">{{ user.name }}</td>
+                  <td class="p-3 text-spu-pink font-semibold">{{ user.role }}</td>
+                  <td class="p-3 text-slate-600">{{ user.phone || '-' }}</td>
+                  <td class="p-3 pr-5 text-[11px] text-slate-400 font-mono">{{ formatDate(user.created_at) }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
           <!-- JSON View -->
           <div v-else class="p-5 bg-slate-900 text-pink-400 font-mono text-xs overflow-x-auto max-h-[500px]">
-            <pre>{{ JSON.stringify(selectedTable === 'tickets' ? tickets : statusLogs, null, 2) }}</pre>
+            <pre>{{ JSON.stringify(selectedTable === 'tickets' ? tickets : (selectedTable === 'status_logs' ? statusLogs : adminUsers), null, 2) }}</pre>
           </div>
         </div>
 
@@ -245,16 +313,23 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Database, RefreshCw, ExternalLink, Eye, Terminal, HardDrive, X } from 'lucide-vue-next'
+import { Database, RefreshCw, ExternalLink, Eye, Terminal, HardDrive, X, Menu, Bell } from 'lucide-vue-next'
+import { useAdminAuth } from '~/composables/useAdminAuth'
+import { useAdminNotifications } from '~/composables/useAdminNotifications'
+import { useAdminSidebar } from '~/composables/useAdminSidebar'
 
 const router = useRouter()
+const adminAuth = useAdminAuth()
+const notif = useAdminNotifications()
+const adminSidebar = useAdminSidebar()
 const isLoading = ref(false)
-const selectedTable = ref<'tickets' | 'status_logs'>('tickets')
+const selectedTable = ref<'tickets' | 'status_logs' | 'admin_users'>('tickets')
 const viewFormat = ref<'table' | 'json'>('table')
 const showPrismaStudioGuide = ref(false)
 
 const tickets = ref<any[]>([])
 const statusLogs = ref<any[]>([])
+const adminUsers = ref<any[]>([])
 
 function formatDate(iso: string) {
   if (!iso) return '-'
@@ -273,6 +348,7 @@ async function fetchDbRaw() {
     if (res.success && res.tables) {
       tickets.value = res.tables.tickets.rows
       statusLogs.value = res.tables.status_logs.rows
+      adminUsers.value = res.tables.admin_users?.rows || []
     }
   } catch (err: any) {
     alert(`Failed to query database: ${err.message}`)
@@ -282,6 +358,7 @@ async function fetchDbRaw() {
 }
 
 onMounted(() => {
+  adminSidebar.initSidebar()
   fetchDbRaw()
 })
 </script>

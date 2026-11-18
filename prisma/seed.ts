@@ -11,7 +11,7 @@ async function main() {
 
   const tickets = [
     {
-      id: 'SPU-8821',
+      id: 'Ticket 1',
       building: 'Building 11',
       floor: '5',
       room: '11-502 (Multimedia Lab)',
@@ -36,7 +36,7 @@ async function main() {
       ]
     },
     {
-      id: 'SPU-8824',
+      id: 'Ticket 2',
       building: 'Building 5',
       floor: '1',
       room: 'Restroom Comm Arts Ground Floor',
@@ -59,7 +59,7 @@ async function main() {
       ]
     },
     {
-      id: 'SPU-8815',
+      id: 'Ticket 3',
       building: 'Central Library',
       floor: '2',
       room: 'Silent Study Zone D',
@@ -84,7 +84,7 @@ async function main() {
       ]
     },
     {
-      id: 'SPU-8794',
+      id: 'Ticket 4',
       building: 'Building 5',
       floor: '3',
       room: '5-301 (Smart Seminar Hall)',
@@ -107,7 +107,7 @@ async function main() {
       ]
     },
     {
-      id: 'SPU-8650',
+      id: 'Ticket 5',
       building: 'Central Library',
       floor: '3',
       room: '3rd Floor Quiet Zone',
@@ -133,7 +133,7 @@ async function main() {
       ]
     },
     {
-      id: 'SPU-8820',
+      id: 'Ticket 6',
       building: 'Building 11',
       floor: '2',
       room: '11-204 (Digital Media Studio)',

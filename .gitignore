@@ -32,3 +32,6 @@ Thumbs.db
 
 # Prisma SQLite database
 prisma/*.db-journal
+prisma/*.db-wal
+prisma/*.db-shm
+prisma/*.bak*

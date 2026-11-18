@@ -25,6 +25,7 @@ model Ticket {
   likes            Int         @default(0)
   comments_count   Int         @default(0)
   rating           Int?
+  lang             String?     @default("th") // "th" or "en"
   created_at       DateTime    @default(now())
   updated_at       DateTime    @updatedAt
 
@@ -39,3 +40,16 @@ model StatusLog {
   note        String?
   created_at  DateTime @default(now())
 }
+
+model AdminUser {
+  id          String   @id @default(cuid())
+  username    String   @unique
+  password    String
+  name        String
+  role        String   @default("Technician")
+  phone       String?
+  avatar_url  String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+

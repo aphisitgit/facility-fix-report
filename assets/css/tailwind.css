@@ -3,9 +3,34 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
   body {
     @apply bg-slate-50 text-slate-800 antialiased font-sans selection:bg-spu-pink-200 selection:text-spu-purple-900;
+    line-height: 1.6;
+    word-break: normal;
+    overflow-wrap: break-word;
   }
+  /* Typography guard: Keep semantic words together, prevent broken Thai syllables on buttons and titles */
+  h1, h2, h3, h4, h5, h6, button, label, nav, .badge, .btn-label {
+    word-break: keep-all;
+    overflow-wrap: normal;
+  }
+}
+
+/* Helpers for responsive Thai-English word wrapping */
+.break-keep {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.text-balance-thai {
+  text-wrap: balance;
+  word-break: keep-all;
 }
 
 /* Glassmorphism and Custom Accents */

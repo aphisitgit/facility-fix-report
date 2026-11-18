@@ -55,7 +55,7 @@
 ### วิธีที่ 1: ผ่าน In-App Database Explorer บนเว็บ (เร็วที่สุด ไม่ต้องพิมพ์คำสั่ง)
 1. เปิดเบราว์เซอร์ไปที่:
    ```
-   http://localhost:3001/admin/database
+   http://localhost:3000/admin/database
    ```
 2. คุณจะเห็นตารางข้อมูลสดจาก SQLite ทั้งตาราง `Ticket` และ `StatusLog` สามารถดูเป็นแบบ Table View หรือ Raw JSON ได้ทันที พร้อมปุ่ม Refresh
 
@@ -122,10 +122,21 @@ npm run dev
 ```
 
 เปิดดูเว็บแอปพลิเคชันได้ที่:
-- **Mobile Hub**: [http://localhost:3001/](http://localhost:3001/)
-- **ตัวอย่างสแกนห้อง 11-502**: [http://localhost:3001/?building=Building%2011&floor=5&room=11-502](http://localhost:3001/?building=Building%2011&floor=5&room=11-502)
-- **ตัวอย่างสแกนห้อง 5-301**: [http://localhost:3001/?building=Building%205&floor=3&room=5-301](http://localhost:3001/?building=Building%205&floor=3&room=5-301)
-- **แบบฟอร์มแจ้งซ่อม**: [http://localhost:3001/report](http://localhost:3001/report)
-- **ติดตามสถานะ**: [http://localhost:3001/tracking](http://localhost:3001/tracking)
-- **Executive Analytics**: [http://localhost:3001/admin](http://localhost:3001/admin)
-- **Database Explorer**: [http://localhost:3001/admin/database](http://localhost:3001/admin/database)
+- **Mobile Hub**: [http://localhost:3000/](http://localhost:3000/)
+- **ตัวอย่างสแกนห้อง 11-502**: [http://localhost:3000/?building=Building%2011&floor=5&room=11-502](http://localhost:3000/?building=Building%2011&floor=5&room=11-502)
+- **ตัวอย่างสแกนห้อง 5-301**: [http://localhost:3000/?building=Building%205&floor=3&room=5-301](http://localhost:3000/?building=Building%205&floor=3&room=5-301)
+- **แบบฟอร์มแจ้งซ่อม**: [http://localhost:3000/report](http://localhost:3000/report)
+- **ติดตามสถานะ**: [http://localhost:3000/tracking](http://localhost:3000/tracking)
+- **Executive Analytics (Admin)**: [http://localhost:3000/admin](http://localhost:3000/admin)
+- **Database Explorer**: [http://localhost:3000/admin/database](http://localhost:3000/admin/database)
+- **Room QR Generator**: [http://localhost:3000/admin/qr-generator](http://localhost:3000/admin/qr-generator)
+- **หน้าลงทะเบียนเจ้าหน้าที่/แอดมินโดยเฉพาะ (Staff Only)**: [http://localhost:3000/admin/register](http://localhost:3000/admin/register)
+
+### บัญชีผู้ดูแลระบบเริ่มต้นสำหรับทดสอบ (Default Staff Accounts):
+| Username | Password | ชื่อเจ้าหน้าที่ / ช่าง | ตำแหน่งงาน |
+| :--- | :--- | :--- | :--- |
+| `admin` | `admin1234` | Praew Suksom | Operations Director |
+| `somchai` | `1234` | ช่างสมชาย กิจเจริญ | ช่างแอร์และเครื่องกล (HVAC Lead) |
+| `niran` | `1234` | ช่างนิรันดร์ วงศ์แก้ว | ช่างไฟฟ้าอาวุโส (Senior Electrician) |
+| `wichai` | `1234` | ช่างวิชัย นิ่มนวล | ช่างโสตทัศนูปกรณ์ & IT (AV Tech) |
+
